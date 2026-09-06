@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Student Task Management App — organize assignments, schedules, deadlines, reminders, and daily tasks in one place.">
+<title>Student Task Management App — Study Smarter</title>
+<style>
+:root{
+  --bg:#f7f9ff;--surface:#fff;--ink:#111827;--muted:#667085;
+  --primary:#5b5ce2;--primary2:#7c5cff;--cyan:#38bdf8;
+  --line:#e8eaf4;--shadow:0 22px 60px rgba(44,48,110,.13);
+  --radius:24px;--max:1160px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font:inherit}
+.container{width:min(var(--max),calc(100% - 40px));margin:auto}
+header{position:sticky;top:0;z-index:100;background:rgba(247,249,255,.84);backdrop-filter:blur(16px);border-bottom:1px solid rgba(232,234,244,.8)}
+.nav{height:76px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.4px}
+.logo-mark{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:white;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 8px 20px rgba(91,92,226,.25)}
+.nav-links{display:flex;gap:28px;color:#475467;font-size:.94rem;font-weight:600}
+.nav-links a:hover{color:var(--primary)}
+.nav-cta,.primary{border:0;color:white;background:linear-gradient(135deg,var(--primary),var(--primary2));box-shadow:0 12px 24px rgba(91,92,226,.22)}
+.nav-cta{padding:10px 17px;border-radius:12px;font-weight:700;cursor:pointer}
+.menu{display:none;border:0;background:none;font-size:1.6rem;cursor:pointer}
+.hero{position:relative;padding:92px 0 100px;overflow:hidden}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(5px);pointer-events:none}
+.hero:before{width:520px;height:520px;right:-180px;top:-160px;background:radial-gradient(circle,rgba(124,92,255,.16),transparent 68%)}
+.hero:after{width:480px;height:480px;left:-250px;bottom:-220px;background:radial-gradient(circle,rgba(56,189,248,.13),transparent 68%)}
+.hero-grid{display:grid;grid-template-columns:1fr .9fr;align-items:center;gap:70px;position:relative;z-index:1}
+.badge{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid #dedfff;background:#f0f0ff;color:#514fc7;border-radius:999px;font-weight:750;font-size:.78rem;margin-bottom:22px}
+.badge span{width:7px;height:7px;border-radius:50%;background:#6d6ff2}
+h1{font-size:clamp(2.7rem,5vw,4.55rem);line-height:1.03;letter-spacing:-3px;max-width:700px}
+.gradient-text{background:linear-gradient(100deg,#4d50d9,#8b5cf6,#20a9e8);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:1.08rem;color:var(--muted);max-width:600px;margin:24px 0 30px}
+.actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:14px;font-weight:750;transition:.25s;cursor:pointer}
+.btn:hover{transform:translateY(-2px)}
+.secondary{background:white;border:1px solid var(--line);box-shadow:0 8px 20px rgba(16,24,40,.05)}
+.secondary:hover{border-color:#c9caf5}
+.phone-wrap{display:flex;justify-content:center;position:relative}
+.phone{width:315px;border:9px solid #171a2a;border-radius:42px;background:#f6f7ff;box-shadow:0 35px 80px rgba(28,31,70,.28);padding:15px;position:relative;transform:rotate(2deg)}
+.phone:before{content:"";position:absolute;width:88px;height:20px;background:#171a2a;top:-8px;left:50%;transform:translateX(-50%);border-radius:0 0 16px 16px}
+.app-top{display:flex;justify-content:space-between;align-items:center;padding:12px 5px 15px}
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c5cff,#38bdf8);display:grid;place-items:center;color:white;font-weight:800;font-size:.75rem}
+.app-title{font-weight:800;font-size:.9rem}
+.mini{color:#8991a5;font-size:.65rem}
+.welcome{background:linear-gradient(135deg,#5b5ce2,#7b61ff);color:#fff;border-radius:20px;padding:17px;margin-bottom:12px}
+.welcome small{opacity:.8}.welcome h3{margin:2px 0 8px;font-size:1.15rem}
+.progress{height:6px;background:rgba(255,255,255,.25);border-radius:99px;overflow:hidden}.progress i{display:block;width:72%;height:100%;background:#fff;border-radius:99px}
+.phone-section{background:#fff;border:1px solid #eeeef6;border-radius:17px;padding:12px;margin-top:10px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.row strong{font-size:.75rem}.link{font-size:.61rem;color:var(--primary);font-weight:700}
+.task{display:flex;gap:9px;align-items:center;margin-top:10px}.check{width:17px;height:17px;border-radius:6px;border:1.5px solid #d5d8e6}.done{background:#5b5ce2;border-color:#5b5ce2;color:#fff;font-size:.65rem;display:grid;place-items:center}.task b{font-size:.68rem}.task small{display:block;color:#9299ab;font-size:.57rem}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:9px;text-align:center;font-size:.55rem}.calendar span{padding:4px;border-radius:6px}.calendar .active{background:#e9e8ff;color:#514fc7;font-weight:800}
+.section{padding:100px 0}.section.alt{background:#fff}
+.center{text-align:center;max-width:720px;margin:0 auto 48px}.eyebrow{color:var(--primary);font-weight:800;text-transform:uppercase;letter-spacing:1.5px;font-size:.72rem;margin-bottom:10px}.center h2,.split h2{font-size:clamp(2rem,4vw,3.1rem);line-height:1.1;letter-spacing:-1.7px}.center p,.split p{color:var(--muted);margin-top:15px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:27px;box-shadow:0 10px 35px rgba(16,24,40,.04);transition:.3s}.card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:#d7d7fa}.icon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:#f0f0ff;color:#5556d7;font-size:1.25rem;margin-bottom:19px}.card h3{font-size:1.06rem;margin-bottom:7px}.card p{font-size:.91rem;color:var(--muted)}
+.problem .card{min-height:185px}.problem .icon{background:#f4f7ff}
+.solution-grid{grid-template-columns:repeat(4,1fr)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:center}
+.wireframe{background:#eef0ff;border-radius:30px;padding:28px;box-shadow:var(--shadow)}
+.wire{background:#fff;border:2px dashed #b8b9dc;border-radius:18px;padding:18px;min-height:350px;position:relative}
+.wire .wf-top{height:42px;border:1px solid #d7d9e7;border-radius:9px;margin-bottom:12px}
+.wf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wf-box{height:86px;border:1px solid #d7d9e7;border-radius:12px;padding:9px;color:#777d92;font-size:.7rem}.wf-box.large{grid-column:1/-1;height:92px}.wf-nav{position:absolute;bottom:15px;left:15px;right:15px;height:38px;border-radius:10px;background:#f2f3f9;border:1px solid #dedfeb;display:flex;align-items:center;justify-content:space-around;color:#777d92;font-size:.65rem}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;align-items:center;margin-top:35px}.flow-item{background:#fff;border:1px solid var(--line);padding:23px 15px;border-radius:18px;text-align:center;position:relative}.flow-item:not(:last-child):after{content:"→";position:absolute;right:-18px;top:50%;transform:translateY(-50%);color:var(--primary);font-size:1.4rem;font-weight:800;z-index:2}.flow-num{width:34px;height:34px;border-radius:10px;margin:0 auto 9px;display:grid;place-items:center;background:#eeeeff;color:#5556d7;font-weight:800}.flow-item h3{font-size:.9rem}.flow-item p{font-size:.76rem;color:var(--muted);margin-top:4px}
+.benefits{background:linear-gradient(135deg,#171a3b,#37378b);color:white}.benefit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.benefit{border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.06);border-radius:18px;padding:22px;transition:.25s}.benefit:hover{background:rgba(255,255,255,.1);transform:translateY(-4px)}.benefit strong{display:block;margin-bottom:4px}.benefit p{font-size:.84rem;color:#c9cce3}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.step{padding:28px;border-radius:22px;background:#fff;border:1px solid var(--line)}.step-no{font-size:2.2rem;font-weight:900;color:#dfe0fb;line-height:1;margin-bottom:18px}.step h3{margin-bottom:7px}.step p{color:var(--muted);font-size:.9rem}
+.cta{padding:90px 0}.cta-box{border-radius:32px;padding:65px 30px;text-align:center;background:linear-gradient(135deg,#5657db,#7859e8 55%,#32a9e4);color:white;box-shadow:0 30px 70px rgba(83,84,210,.28)}.cta-box h2{font-size:clamp(2rem,4vw,3.25rem);letter-spacing:-1.5px;line-height:1.1}.cta-box p{max-width:650px;margin:14px auto 25px;color:#e9eaff}.cta-box .btn{background:#fff;color:#4d50c9}
+footer{background:#101226;color:#aeb2c5;padding:55px 0 25px}.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:35px}.footer-brand{color:white}.footer-brand p{margin-top:12px;max-width:330px;font-size:.86rem;color:#9297ad}.footer h4{color:white;margin-bottom:12px;font-size:.86rem}.footer a{display:block;font-size:.82rem;margin:8px 0}.footer a:hover{color:white}.copyright{border-top:1px solid #25283d;margin-top:38px;padding-top:20px;font-size:.76rem;text-align:center}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}.reveal.show{opacity:1;transform:none}
+@media(max-width:900px){.hero-grid,.split{grid-template-columns:1fr}.hero{padding-top:65px}.hero-copy{text-align:center}.hero p{margin-left:auto;margin-right:auto}.actions{justify-content:center}.cards{grid-template-columns:repeat(2,1fr)}.solution-grid{grid-template-columns:repeat(2,1fr)}.split{gap:35px}.phone{transform:none}.footer-grid{grid-template-columns:2fr 1fr 1fr}}
+@media(max-width:700px){.container{width:min(var(--max),calc(100% - 28px))}.nav-links,.nav-cta{display:none}.menu{display:block}.nav.open .nav-links{display:flex;position:absolute;top:76px;left:0;right:0;background:#fff;border-bottom:1px solid var(--line);padding:18px;flex-direction:column;gap:15px}.hero{padding:55px 0 70px}h1{letter-spacing:-2px}.section{padding:72px 0}.cards,.solution-grid,.benefit-grid,.steps,.flow{grid-template-columns:1fr}.flow-item:not(:last-child):after{content:"↓";right:auto;left:50%;top:auto;bottom:-25px;transform:translateX(-50%)}.flow-item{margin-bottom:27px}.footer-grid{grid-template-columns:1fr 1fr}.wireframe{padding:16px}}
+@media(max-width:430px){.footer-grid{grid-template-columns:1fr}.phone{width:285px}.actions .btn{width:100%}}
+</style>
+</head>
+<body>
+<header>
+  <nav class="nav container" id="nav">
+    <a href="#home" class="logo"><span class="logo-mark">✓</span><span>StudentFlow</span></a>
+    <div class="nav-links">
+      <a href="#problem">Why StudentFlow</a><a href="#features">Features</a><a href="#process">Process</a><a href="#how">How It Works</a>
+    </div>
+    <a class="nav-cta" href="#cta">Get Started</a>
+    <button class="menu" aria-label="Open navigation" aria-expanded="false">☰</button>
+  </nav>
+</header>
+
+<main id="home">
+<section class="hero">
+<div class="container hero-grid">
+  <div class="hero-copy reveal">
+    <div class="badge"><span></span> Study Smarter. Stay Organized.</div>
+    <h1>Everything You Need to <span class="gradient-text">Stay on Top</span> of Student Life.</h1>
+    <p>Manage assignments, class schedules, deadlines, reminders, and daily tasks from one simple place—so you can spend less time organizing and more time learning.</p>
+    <div class="actions"><a class="btn primary" href="#cta">Get Started</a><a class="btn secondary" href="#how">See How It Works <span aria-hidden="true">→</span></a></div>
+  </div>
+  <div class="phone-wrap reveal" aria-label="StudentFlow app dashboard preview">
+    <div class="phone">
+      <div class="app-top"><div><div class="mini">MON, SEP 07</div><div class="app-title">Good morning, Alex</div></div><div class="avatar">A</div></div>
+      <div class="welcome"><small>Today's progress</small><h3>You're doing great!</h3><div class="progress"><i></i></div></div>
+      <div class="phone-section"><div class="row"><strong>Today's Tasks</strong><span class="link">View all</span></div><div class="task"><span class="check done">✓</span><div><b>Finish UX research</b><small>Computer Science · 10:00 AM</small></div></div><div class="task"><span class="check"></span><div><b>Read Chapter 6</b><small>Business · 4:00 PM</small></div></div></div>
+      <div class="phone-section"><div class="row"><strong>Upcoming</strong><span class="link">Calendar</span></div><div class="calendar"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span><span>7</span><span>8</span><span class="active">9</span><span>10</span><span>11</span><span>12</span><span>13</span></div></div>
+      <div class="phone-section"><div class="row"><strong>Reminder</strong><span class="link">Tomorrow</span></div><div class="task"><span class="check"></span><div><b>Math assignment due</b><small>Tomorrow · 11:59 PM</small></div></div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section class="section problem" id="problem">
+<div class="container">
+<div class="center reveal"><div class="eyebrow">The problem</div><h2>Student Life Gets Busy. Your Tasks Don't Have To.</h2><p>When deadlines, classes, reminders, and personal responsibilities pile up, staying organized becomes a challenge.</p></div>
+<div class="cards">
+<div class="card reveal"><div class="icon">⏰</div><h3>Missed Deadlines</h3><p>Important assignments can get buried under notifications and competing priorities.</p></div>
+<div class="card reveal"><div class="icon">▦</div><h3>Multiple Classes</h3><p>Keeping schedules, coursework, and important dates organized across classes takes effort.</p></div>
+<div class="card reveal"><div class="icon">🔔</div><h3>Forgotten Reminders</h3><p>Without timely reminders, small tasks can quickly become last-minute stress.</p></div>
+<div class="card reveal"><div class="icon">☷</div><h3>Daily Overload</h3><p>A busy day is harder to manage when your to-do list lives in your head.</p></div>
+<div class="card reveal"><div class="icon">◎</div><h3>Too Many Apps</h3><p>Switching between calendars, notes, task apps, and messages wastes valuable time.</p></div>
+<div class="card reveal"><div class="icon">↗</div><h3>Hard to See Progress</h3><p>Without a clear overview, it can be difficult to know what is done and what comes next.</p></div>
+</div>
+</div>
+</section>
+
+<section class="section alt" id="features">
+<div class="container">
+<div class="center reveal"><div class="eyebrow">The solution</div><h2>One App. Everything Organized.</h2><p>StudentFlow brings the tools students need into one focused, easy-to-use experience.</p></div>
+<div class="cards solution-grid">
+<div class="card reveal"><div class="icon">✓</div><h3>Assignment Manager</h3><p>Add assignments, set priorities, and track progress from start to completion.</p></div>
+<div class="card reveal"><div class="icon">▦</div><h3>Smart Calendar</h3><p>Keep class schedules, events, exams, and important academic dates organized.</p></div>
+<div class="card reveal"><div class="icon">🔔</div><h3>Deadline & Reminder System</h3><p>Receive timely reminders before important deadlines so nothing catches you by surprise.</p></div>
+<div class="card reveal"><div class="icon">☑</div><h3>Daily Task Planner</h3><p>Plan responsibilities for today, check them off, and build momentum every day.</p></div>
+</div>
+</div>
+</section>
+
+<section class="section" id="process">
+<div class="container split">
+<div class="wireframe reveal">
+<div class="wire">
+<div class="wf-top"></div>
+<div class="wf-grid"><div class="wf-box large">Calendar / Week View</div><div class="wf-box">Assignments</div><div class="wf-box">Reminders</div></div>
+<div class="wf-nav"><span>⌂ Home</span><span>▦ Calendar</span><span>✓ Tasks</span><span>⚙ Profile</span></div>
+</div>
+</div>
+<div class="reveal"><div class="eyebrow">Design process</div><h2>Designed Before It's Built.</h2><p>Sketching gives designers a quick way to plan an app's layout before development begins. For StudentFlow, early wireframes map out the calendar, assignment list, reminder area, and navigation buttons.</p><p>Because mobile screens have limited space, sketching helps keep the interface simple, organized, and easy to understand. It also makes it easier to spot layout problems before time is spent building the final product.</p></div>
+</div>
+</section>
+
+<section class="section alt">
+<div class="container">
+<div class="center reveal"><div class="eyebrow">Prototyping</div><h2>Test. Improve. Perfect the Experience.</h2><p>Prototyping turns ideas into a basic interactive experience that can be tested with students before final development.</p></div>
+<div class="flow">
+<div class="flow-item reveal"><div class="flow-num">01</div><h3>Add Assignment</h3><p>Enter the task and course.</p></div>
+<div class="flow-item reveal"><div class="flow-num">02</div><h3>Set Deadline</h3><p>Choose date and priority.</p></div>
+<div class="flow-item reveal"><div class="flow-num">03</div><h3>Receive Reminder</h3><p>Get notified in time.</p></div>
+<div class="flow-item reveal"><div class="flow-num">04</div><h3>Complete Task</h3><p>Mark it done and track progress.</p></div>
+</div>
+<div class="center reveal" style="margin-top:45px;margin-bottom:0"><p>Prototype testing can reveal confusing buttons, difficult navigation, unnecessary features, and other user-experience problems. Fixing these issues early creates a smoother and more useful final application.</p></div>
+</div>
+</section>
+
+<section class="section benefits">
+<div class="container">
+<div class="center reveal"><div class="eyebrow" style="color:#9ea0ff">Why it matters</div><h2>Built for Better Student Life.</h2><p style="color:#c9cce3">A focused workspace designed to turn academic overwhelm into clarity and control.</p></div>
+<div class="benefit-grid">
+<div class="benefit reveal"><strong>✓ Stay organized</strong><p>Keep classes, tasks, and deadlines together.</p></div>
+<div class="benefit reveal"><strong>◷ Never miss a deadline</strong><p>Use reminders to stay ahead of important dates.</p></div>
+<div class="benefit reveal"><strong>♡ Reduce academic stress</strong><p>Replace scattered responsibilities with a clear plan.</p></div>
+<div class="benefit reveal"><strong>↗ Save time</strong><p>Spend less time switching between different tools.</p></div>
+<div class="benefit reveal"><strong>⚡ Improve productivity</strong><p>Prioritize what matters and build daily momentum.</p></div>
+<div class="benefit reveal"><strong>◎ One place for everything</strong><p>Access your student life from one simple dashboard.</p></div>
+</div>
+</div>
+</section>
+
+<section class="section" id="how">
+<div class="container">
+<div class="center reveal"><div class="eyebrow">Simple by design</div><h2>How It Works</h2><p>Three simple steps to move from overwhelmed to in control.</p></div>
+<div class="steps">
+<div class="step reveal"><div class="step-no">01</div><h3>Add Your Tasks</h3><p>Add assignments, classes, deadlines, and daily activities in seconds.</p></div>
+<div class="step reveal"><div class="step-no">02</div><h3>Stay on Track</h3><p>Use the calendar, reminders, and task list to manage your schedule.</p></div>
+<div class="step reveal"><div class="step-no">03</div><h3>Get Things Done</h3><p>Complete tasks, track progress, and stay ahead of your deadlines.</p></div>
+</div>
+</div>
+</section>
+
+<section class="cta" id="cta">
+<div class="container"><div class="cta-box reveal"><h2>Ready to Take Control of Your Student Life?</h2><p>Stop juggling multiple apps and start managing your academic life in one simple place.</p><a class="btn" href="#home">Start Organizing Today →</a></div></div>
+</section>
+</main>
+
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div class="footer-brand"><a class="logo" href="#home"><span class="logo-mark">✓</span><span>StudentFlow</span></a><p>A simple student task management concept designed to make academic life more organized, productive, and stress-free.</p></div>
+<div><h4>Product</h4><a href="#features">Features</a><a href="#how">How It Works</a><a href="#cta">Get Started</a></div>
+<div><h4>Explore</h4><a href="#problem">Why StudentFlow</a><a href="#process">Design Process</a><a href="#process">Prototyping</a></div>
+<div><h4>Contact</h4><a href="mailto:hello@studentflow.app">hello@studentflow.app</a><a href="#cta">Support</a></div>
+</div>
+<div class="copyright">© 2026 StudentFlow. UI/UX mobile application concept.</div>
+</div>
+</footer>
+
+<script>
+const nav=document.querySelector('#nav'), menu=document.querySelector('.menu');
+menu.addEventListener('click',()=>{nav.classList.toggle('open');menu.setAttribute('aria-expanded',nav.classList.contains('open'))});
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
